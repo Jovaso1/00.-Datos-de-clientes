@@ -5,5 +5,4 @@ seaborn
 matplotlib
 requests
 folium
-MarkerCluster
 display
