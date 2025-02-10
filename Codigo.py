@@ -4,7 +4,6 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import requests
-from io import StringIO
 import folium
 from folium.plugins import MarkerCluster
 from streamlit.components.v1 import html
