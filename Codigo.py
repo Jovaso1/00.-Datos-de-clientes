@@ -7,7 +7,7 @@ import requests
 from io import StringIO
 import folium
 from folium.plugins import MarkerCluster
-from IPython.display import display
+from streamlit.components.v1 import html
 
 def leer_datos(archivo=None, url=None):
     if archivo:
@@ -87,7 +87,9 @@ def crear_mapa(df, segmento='global'):
             if pd.notnull(row['Latitud']) and pd.notnull(row['Longitud']):
                 folium.Marker(location=[row['Latitud'], row['Longitud']], popup=f"Frecuencia: {row['Frecuencia_Compra']}, ID: {row['ID_Cliente']}, Nombre: {row['Nombre']}").add_to(marker_cluster)
 
-    st.map(mapa)
+    # Muestra el mapa en Streamlit usando HTML
+    map_html = mapa._repr_html_()
+    html(map_html, height=500)
 
 
 def procesar_datos(metodo_interpolacion='linear', order=None, archivo=None, url=None):
