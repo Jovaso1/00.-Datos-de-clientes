@@ -7,6 +7,7 @@ from io import StringIO
 import folium
 from folium.plugins import MarkerCluster
 import streamlit as st
+import pandas as pd
 
 def leer_datos(archivo=None, url=None):
     """
