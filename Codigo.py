@@ -7,7 +7,6 @@ from io import StringIO
 import folium
 from folium.plugins import MarkerCluster
 import streamlit as st
-import pandas as pd
 
 def leer_datos(archivo=None, url=None):
     """
@@ -101,6 +100,7 @@ def crear_mapa(df, segmento='global'):
 
         # Mostrar el mapa de Folium (en Streamlit)
         st.write(mapa._repr_html_(), unsafe_allow_html=True)
+
 def crear_mapa(df, segmento='global'):
     """
     Crea mapas de ubicación de clientes usando Folium y los muestra en el notebook.
@@ -116,6 +116,9 @@ def crear_mapa(df, segmento='global'):
 
     # Crear un DataFrame para Streamlit con las columnas 'Latitud' y 'Longitud'
     mapa_df = df[['Latitud', 'Longitud']].dropna()
+
+    # Renombrar las columnas para que Streamlit las reconozca
+    mapa_df.rename(columns={'Latitud': 'latitude', 'Longitud': 'longitude'}, inplace=True)
 
     # Mostrar el mapa usando Streamlit
     st.map(mapa_df)
@@ -133,6 +136,7 @@ def crear_mapa(df, segmento='global'):
 
         # Mostrar el mapa de Folium (en Streamlit)
         st.write(mapa._repr_html_(), unsafe_allow_html=True)
+
 
 
 def procesar_datos(metodo_interpolacion='linear', order=None, archivo=None, url=None):
