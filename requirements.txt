@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+seaborn
+matplotlib
+requests
+StringIO
+folium
+MarkerCluster
+display
