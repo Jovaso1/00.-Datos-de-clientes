@@ -70,17 +70,69 @@ def mostrar_graficos(df):
 
 def crear_mapa(df, segmento='global'):
     """
-    Crea mapas de ubicación de clientes usando Folium y los muestra en Streamlit.
-    """
-    mapa = folium.Map(location=[df['Latitud'].mean(), df['Longitud'].mean()], zoom_start=10)
-    marker_cluster = MarkerCluster().add_to(mapa)
+    Crea mapas de ubicación de clientes usando Folium y los muestra en el notebook.
+    Permite ver la ubicación de clientes a nivel global, por género o por frecuencia de compra.
 
+    Args:
+        df (pd.DataFrame): El DataFrame que contiene los datos.
+        segmento (str, optional): El segmento a mostrar en el mapa. Puede ser 'global', 'genero' o 'frecuencia'. Defaults to 'global'.
+    """
+    # Verificar si las columnas de latitud y longitud no contienen valores nulos
+    if df['Latitud'].isnull().any() or df['Longitud'].isnull().any():
+        print("Advertencia: Algunas filas tienen valores nulos en las columnas 'Latitud' o 'Longitud'.")
+
+    # Crear un DataFrame para Streamlit con las columnas 'Latitud' y 'Longitud'
+    mapa_df = df[['Latitud', 'Longitud']].dropna()
+
+    # Mostrar el mapa usando Streamlit
+    st.map(mapa_df)
+
+    # Si quieres usar Folium para agregar más características (por ejemplo, clusters):
     if segmento == 'global':
+        # Inicializar el mapa con folium (usando el promedio de las coordenadas)
+        mapa = folium.Map(location=[df['Latitud'].mean(), df['Longitud'].mean()], zoom_start=10)
+        marker_cluster = MarkerCluster().add_to(mapa)
+        
         for idx, row in df.iterrows():
             if pd.notnull(row['Latitud']) and pd.notnull(row['Longitud']):
-                folium.Marker(location=[row['Latitud'], row['Longitud']], popup=f"ID: {row['ID_Cliente']}, Nombre: {row['Nombre']}").add_to(marker_cluster)
+                folium.Marker(location=[row['Latitud'], row['Longitud']], 
+                              popup=f"ID: {row['ID_Cliente']}, Nombre: {row['Nombre']}").add_to(marker_cluster)
 
-    st.map(mapa)
+        # Mostrar el mapa de Folium (en Streamlit)
+        st.write(mapa._repr_html_(), unsafe_allow_html=True)
+def crear_mapa(df, segmento='global'):
+    """
+    Crea mapas de ubicación de clientes usando Folium y los muestra en el notebook.
+    Permite ver la ubicación de clientes a nivel global, por género o por frecuencia de compra.
+
+    Args:
+        df (pd.DataFrame): El DataFrame que contiene los datos.
+        segmento (str, optional): El segmento a mostrar en el mapa. Puede ser 'global', 'genero' o 'frecuencia'. Defaults to 'global'.
+    """
+    # Verificar si las columnas de latitud y longitud no contienen valores nulos
+    if df['Latitud'].isnull().any() or df['Longitud'].isnull().any():
+        print("Advertencia: Algunas filas tienen valores nulos en las columnas 'Latitud' o 'Longitud'.")
+
+    # Crear un DataFrame para Streamlit con las columnas 'Latitud' y 'Longitud'
+    mapa_df = df[['Latitud', 'Longitud']].dropna()
+
+    # Mostrar el mapa usando Streamlit
+    st.map(mapa_df)
+
+    # Si quieres usar Folium para agregar más características (por ejemplo, clusters):
+    if segmento == 'global':
+        # Inicializar el mapa con folium (usando el promedio de las coordenadas)
+        mapa = folium.Map(location=[df['Latitud'].mean(), df['Longitud'].mean()], zoom_start=10)
+        marker_cluster = MarkerCluster().add_to(mapa)
+        
+        for idx, row in df.iterrows():
+            if pd.notnull(row['Latitud']) and pd.notnull(row['Longitud']):
+                folium.Marker(location=[row['Latitud'], row['Longitud']], 
+                              popup=f"ID: {row['ID_Cliente']}, Nombre: {row['Nombre']}").add_to(marker_cluster)
+
+        # Mostrar el mapa de Folium (en Streamlit)
+        st.write(mapa._repr_html_(), unsafe_allow_html=True)
+
 
 def procesar_datos(metodo_interpolacion='linear', order=None, archivo=None, url=None):
     """
